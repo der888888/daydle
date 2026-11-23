@@ -1,0 +1,595 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Quicksand:wght@400;500;600;700&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #faf8f4;
+  color: #4f4a45;
+  font-family: "Quicksand", sans-serif;
+}
+
+
+.calendar-app {
+  width: 100%;
+  height: 100vh;
+  padding: 24px 32px;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-shrink: 0;
+  margin-bottom: 18px;
+}
+
+
+.month-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.month-heading h1 {
+  margin: 0;
+  font-family: "Gaegu", cursive;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  color: #4d4742;
+}
+
+.month-heading span {
+  font-family: "Quicksand", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #9a9188;
+}
+
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: 34px;
+  grid-auto-rows: minmax(0, 1fr);
+
+  flex: 1;
+  min-height: 0;
+
+  border-top: 1px solid #ddd6cc;
+  border-left: 1px solid #ddd6cc;
+  background: #fffdf9;
+}
+
+
+.weekday {
+  height: 34px;
+  padding: 6px 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  font-family: "Gaegu", cursive;
+  font-size: 15px;
+  font-weight: 700;
+  color: #8f867e;
+
+  border-right: 1px solid #ddd6cc;
+  border-bottom: 1px solid #ddd6cc;
+
+  background: #fcfaf6;
+}
+
+
+.day-cell {
+  min-width: 0;
+  min-height: 0;
+  padding: 0px 12px 8px;
+
+  background: #fffdf9;
+  border-right: 1px solid #ddd6cc;
+  border-bottom: 1px solid #ddd6cc;
+
+  vertical-align: top;
+}
+
+
+.day-cell.empty {
+  background: #f8f5ef;
+}
+
+
+.day-number {
+  font-family: "Gaegu", cursive;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  color: #4e4944;
+}
+
+
+
+.day-cell.today .day-number {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  line-height: 1;
+  border-radius: 50%;
+  background: #e7c8ce;
+  color: #5b4248;
+}
+
+
+
+/* Calendar Navigation */
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.calendar-controls button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-width: 42px;
+  height: 42px;
+  padding: 0 14px;
+
+  background: #fffdf9;
+  border: 1px solid #d9d2c8;
+  border-radius: 12px;
+
+  color: #6c645d;
+  font-family: "Quicksand", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.calendar-controls button:hover {
+  background: #f6f1ea;
+}
+
+.calendar-controls button:active {
+  transform: translateY(1px);
+}
+
+
+.calendar-controls .today-button {
+  width: auto;
+  padding: 0 16px;
+
+  font-family: "Gaegu", cursive;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+
+
+/* Date Selection */
+
+
+.day-cell:not(.empty) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  padding: 7px 12px;
+
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: inherit;
+
+  border-top: 0;
+  border-left: 0;
+  border-radius: 0;
+}
+
+
+.day-cell:not(.empty):hover {
+  background: #f8f5ef;
+}
+
+.day-cell.selected,
+.day-cell.selected:hover {
+  background: #f3f6ef;
+  box-shadow: inset 0 0 0 1.5px #a9bba7;
+}
+
+.day-cell:focus-visible {
+  outline: 2px solid #829b83;
+  outline-offset: -3px;
+  z-index: 1;
+}
+
+
+/* Calendar Events */
+
+
+.day-events {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+
+.day-event {
+  font-family: "Quicksand", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6f876f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-left: 2px solid #adc0ac;
+  padding-left: 6px;
+}
+
+.more-events {
+  font-family: "Gaegu", cursive;
+  font-size: 12px;
+  color: #9a9188;
+}
+
+/* Event Panel Backdrop */
+
+.panel-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  border: none;
+  background: rgba(55, 48, 43, 0.2);
+  cursor: default;
+}
+
+/* Event Panel */
+
+.event-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 11;
+
+  width: 350px;
+  max-width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+
+  background: #fffefa;
+  padding: 32px 26px;
+
+  box-shadow: -8px 0 30px rgba(60, 52, 46, 0.08);
+
+  animation: slideIn 0.25s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.panel-label {
+  font-family: "Gaegu", cursive;
+  font-size: 15px;
+  color: #9caf9a;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-family: "Gaegu", cursive;
+  font-size: 30px;
+  font-weight: 700;
+  color: #4f4a45;
+}
+
+.panel-weekday {
+  margin-top: 6px;
+  color: #99918a;
+  font-size: 13px;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 600;
+}
+
+.close-panel {
+  border: none;
+  background: transparent;
+  color: #89817b;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.close-panel:hover {
+  color: #494540;
+}
+
+.panel-divider {
+  height: 1px;
+  background: #e8e3dc;
+  margin: 24px 0;
+}
+
+.event-panel h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.selected-events {
+  min-height: 110px;
+}
+
+.empty-message {
+  color: #aaa19a;
+  font-size: 13px;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.panel-event {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+
+  background: #f7f5ef;
+  border-radius: 8px;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.event-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #a8b9a4;
+  flex-shrink: 0;
+}
+
+/* Add Event Form */
+
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.event-form label {
+  font-family: "Gaegu", cursive;
+  font-size: 18px;
+  font-weight: 700;
+  color: #5a534d;
+}
+
+.event-form input {
+  padding: 12px 14px;
+  border: 1px solid #ddd6cc;
+  border-radius: 10px;
+  background: #fff;
+  color: #494540;
+  font-family: "Quicksand", sans-serif;
+  font-size: 13px;
+}
+
+.event-form input:focus {
+  border-color: #a8b9a4;
+}
+
+.add-event-btn {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #a8b9a4;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-event-btn:hover {
+  background: #91a68e;
+}
+
+
+/* Event Delete Button */
+
+.event-title {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.delete-event-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 24px;
+  height: 24px;
+
+  margin-left: auto;
+  flex-shrink: 0;
+
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+
+  color: #aaa19a;
+  font-size: 20px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-event-btn:hover {
+  background: #f3e3e5;
+  color: #b77985;
+}
+
+.delete-event-btn:focus-visible {
+  outline: 2px solid #b77985;
+  outline-offset: 2px;
+}
+
+
+/* Doodle Decorations */
+
+.day-cell:not(.empty) {
+  position: relative;
+}
+
+
+
+.day-doodle {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+
+  width: 36px;
+  height: 36px;
+
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+
+
+/* Subtle pastel doodle colors */
+
+
+/* Doodle Colors */
+
+.doodle-dog {
+  color: #a18b80;
+}
+
+.doodle-cake {
+  color: #cc9ba8;
+}
+
+.doodle-plane {
+  color: #92a9bc;
+}
+
+.doodle-star {
+  color: #c4ae79;
+}
+
+.doodle-smile {
+  color: #91a58c;
+}
+
+
+.doodle-tree {
+  color: #829b83;
+}
+
+
+
+/* Doodle Picker */
+
+.doodle-editor {
+  margin: 22px 0;
+  padding-top: 18px;
+  border-top: 1px solid #e8e3dc;
+}
+
+.doodle-editor h3 {
+  margin-bottom: 14px;
+  font-family: "Gaegu", cursive;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.doodle-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.doodle-option {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 5px;
+  border: 1px solid #e4ddd5;
+  border-radius: 9px;
+
+  background: #fffdf9;
+  color: #78716b;
+  font-family: "Gaegu", cursive;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.doodle-option svg {
+  width: 28px;
+  height: 28px;
+}
+
+.doodle-option:hover {
+  background: #f5f0e9;
+}
+
+.doodle-option.active {
+  border-color: #9eaf99;
+  background: #edf2e9;
+}
+
+
+/* Prevent doodles from overlapping events */
+
+.day-cell {
+  overflow: hidden;
+}
+
+.day-event {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
